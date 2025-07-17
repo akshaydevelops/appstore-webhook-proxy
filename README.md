@@ -5,6 +5,7 @@
 
 [![Docker Ready](https://img.shields.io/badge/docker-ready-blue)](https://hub.docker.com/r/yannisalexiou/appstore-webhook-proxy)
 [![Render Ready](https://img.shields.io/badge/Render-Ready-8A06FF?style=flat&logo=render&logoSize=auto)](https://render.com/deploy)
+[![Vercel Ready](https://img.shields.io/badge/vercel-ready-black?logo=vercel&logoColor=white)](https://vercel.com/)
 [![Unraid Ready](https://img.shields.io/badge/Unraid-Ready-f15a2c?style=flat&logo=unraid&logoSize=auto)](https://forums.unraid.net/topic/191280-support-yannisalexiou-app-store-webhook-proxy/)
 
 ![Slack Integration](https://img.shields.io/badge/slack-supported-4A154B?logo=slack&logoColor=white)
@@ -64,21 +65,41 @@ Unknown events will still be delivered in raw JSON.
 ---
 
 ## 🔧 Proxy Setup Options
+
 Here you can find all the available options to run the proxy.
 
 ⚠️ To make the proxy work, it must be accessible from the internet. In my Unraid setup, I use an NGINX reverse proxy. If you're not familiar with this, it's easier to use the [1. One-Click Render Deployment](#1-one-click-render-deployment) option, which provides a public domain automatically.
 
 **The incoming webhook should be sent to the path: `/appstore-webhook`.**
 
-### 1. One-Click Render Deployment
+### 1. Deploy to Vercel (Serverless)
+
+You can deploy this proxy to [Vercel](https://vercel.com/) for instant, serverless hosting:
+
+1. [Fork or clone this repo](https://github.com/yourusername/appstore-webhook-proxy).
+2. Push it to your own GitHub account (if forking).
+3. Go to [Vercel](https://vercel.com/import/git) and import your repository.
+4. Set the required environment variables in the Vercel dashboard (see [Environment Variables](#%EF%B8%8F-environment-variables)).
+5. Deploy!
+
+> The webhook endpoint will be available at `https://your-vercel-project.vercel.app/appstore-webhook`.
+
+> Vercel automatically sets `NODE_ENV=production`.
+
+---
+
+### 2. One-Click Render Deployment
+
 Click below to deploy instantly to Render:
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 Make sure to set the environment variables during setup [(Read the Environment Variables table below)](#%EF%B8%8F-environment-variables).
+
 > Render automatically sets `NODE_ENV=production`
 
-### 2. Unraid Setup
+### 3. Unraid Setup
+
 To install via Unraid:
 
 1. Open the **Apps** tab in your Unraid dashboard.
@@ -92,7 +113,8 @@ Join the support thread in the [Unraid Community Forum](https://forums.unraid.ne
 🎥 **Watch the setup walkthrough:**  
 [![Watch the video](https://img.youtube.com/vi/g_EBC1CdblE/0.jpg)](https://www.youtube.com/watch?v=g_EBC1CdblE)
 
-### 3. Docker Setup
+### 4. Docker Setup
+
 Build and run using Docker:
 
 ```bash
@@ -100,7 +122,8 @@ docker build -t appstore-webhook-proxy .
 docker run -p 3000:3000 --env-file .env appstore-webhook-proxy
 ```
 
-### 4. Manual Setup (Node.js)
+### 5. Manual Setup (Node.js)
+
 If you'd like to run the app directly with Node.js:
 
 ```bash
