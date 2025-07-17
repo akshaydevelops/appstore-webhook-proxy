@@ -172,6 +172,68 @@ function buildSlackMessage(payload) {
         },
       },
       {
+    betaFeedbackCrashSubmissions: () => {
+      const crashId = payload.data.relationships?.instance?.data?.id;
+      const timestamp = formatTimestamp(payload.data.attributes.timestamp);
+
+      const adamId = process.env.APP_ADAM_ID;
+      const bundleId = process.env.APP_BUNDLE_ID;
+      const platformId = process.env.APP_PLATFORM_ID;
+
+      const elements = [];
+      const isValidCrashId = typeof crashId === "string" && crashId.trim() !== "";
+
+      if (isValidCrashId && adamId) {
+        const webLink = `https://appstoreconnect.apple.com/apps/${adamId}/testflight/crashes/${crashId}`;
+        elements.push({
+          type: "mrkdwn",
+          text: `🌐 <${webLink}|View Crash in App Store Connect>`,
+        });
+      }
+
+      if (isValidCrashId && adamId && bundleId && platformId) {
+        const xcodeLink = `xcode://organizer/feedback/downloadFeedback?adamId=${adamId}&feedbackId=${crashId}&bundleId=${bundleId}&platformId=${platformId}&userAgent=appStoreConnect`;
+        elements.push({
+          type: "mrkdwn",
+          text: `💻 <${xcodeLink}|Open Crash in Xcode Organizer>`,
+        });
+      }
+
+      const blocks = [
+        {
+          type: "header",
+          text: {
+            type: "plain_text",
+            text: "💥 TestFlight Crash Submitted",
+            emoji: true,
+          },
+        },
+        {
+          type: "section",
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `*Crash ID:*
+\`${crashId}\``,
+            },
+            {
+              type: "mrkdwn",
+              text: `*Timestamp:*
+${timestamp}`,
+            },
+          ],
+        },
+      ];
+
+      if (elements.length > 0) {
+        blocks.push({
+          type: "context",
+          elements,
+        });
+      }
+
+      return { blocks };
+    },
         type: "section",
         text: {
           type: "mrkdwn",
