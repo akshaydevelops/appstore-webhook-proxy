@@ -30,8 +30,14 @@ app.use("/appstore-webhook", webhookRouter);
 
 app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(
-    `🚀 Webhook proxy running at http://localhost:${port}/appstore-webhook`
-  );
-});
+// Export the app for Vercel serverless function
+module.exports = app;
+
+// Only start server if not running in a serverless environment
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(
+      `🚀 Webhook proxy running at http://localhost:${port}/appstore-webhook`
+    );
+  });
+}
